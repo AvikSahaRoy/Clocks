@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Alarm Clock</title>
+    <style>
+        body {
+            /* font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0; */
+            margin: 0;
+            height: 100vh;
+            width: 100%;
+            background-image: url('./Images/BgImage.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            /* background-color: #fff; */
+            padding: 30px;
+            border-radius: 10px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            width: 300px;
+            margin: 10px;
+
+            margin-top: 40px;
+            background-color: rgba(255, 255, 255, 0);
+            box-shadow: 0.2px 0.2px 1px #ffffff, 10px 10px 100px #8677e2, 10px 10px 100px #39306e, -0.2px -0.2px 1px #ffffff;
+            border-radius: 0px 10px 0px;
+            padding: 30px 40px 30px 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .btn1 {
+            color: #fff;
+            background-color: #786bc8;
+        }
+
+        .btn2 {
+            color: #fff;
+            background-color: #000;
+        }
+
+        #alarmTime {
+            font-size: 30px;
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        #timer {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+
+        .disclaimer {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            margin-left: auto;
+            right: 0;
+            margin-right: auto;
+            width: fit-content;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .disclaimer a {
+            text-decoration: none;
+            color: #584f95;
+        }
+
+        .disclaimer a:hover {
+            font-weight: bolder;
+            text-decoration: underline;
+        }
+
+        /* Image shake animation--------------- */
+        #clockImage {
+            width: 100px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(5deg);
+            }
+
+            50% {
+                transform: rotate(0eg);
+            }
+
+            75% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- <h1>Alarm Clock</h1> -->
+        <img id="clockImage" src="./Images/clock.svg" alt="clock Image">
+        <input type="time" id="alarmTime" required><br>
+        <button onclick="setAlarm()" class="btn1">Set Alarm</button>
+        <button onclick="clearAlarm()" class="btn2">Stop Alarm</button>
+        <div id="timer"></div>
+    </div>
+
+    <p class="disclaimer">
+        Designed & Created by <a href="https://aviksaharoy.github.io/" target="_blank">Avik</a>
+    </p>
+
+    <audio id="alarmSound" preload="auto" src="./Images/ringtone.mp3"></audio>
+</body>
+<script>
+    let alarmTimeout;
+
+    function setAlarm() {
+        const alarmTimeInput = document.getElementById('alarmTime');
+        const alarmTime = alarmTimeInput.value;
+
+        if (alarmTime) {
+            const now = new Date();
+            const alarm = new Date(now.toDateString() + ' ' + alarmTime);
+
+            const timeUntilAlarm = alarm - now;
+            // alert('Alarm set successfully...');
+
+            if (timeUntilAlarm > 0) {
+                alarmTimeout = setTimeout(() => {
+                    playAlarmSound();
+                    // alert('Time to wake up!');
+                }, timeUntilAlarm);
+
+                // Start the timer
+                updateTimer(timeUntilAlarm);
+            } else {
+                alert('Please select a future time for the alarm!');
+            }
+        } else {
+            alert('Please set a valid alarm time!');
+        }
+    }
+
+    function updateTimer(timeRemaining) {
+        const timerElement = document.getElementById('timer');
+
+        function update() {
+            if (timeRemaining >= 0) {
+                const minutes = Math.floor(timeRemaining / 60000);
+                const seconds = ((timeRemaining % 60000) / 1000).toFixed(0);
+                timerElement.innerHTML = `Time Remaining: ${minutes}:${(seconds < 10 ? '0' : '')}${seconds}`;
+            } else {
+                timerElement.innerHTML = 'Time Remaining: 00:00';
+            }
+        }
+
+        update(); // Initial update
+
+        const timerInterval = setInterval(() => {
+            timeRemaining -= 1000;
+            update();
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+            }
+        }, 1000);
+    }
+
+    function playAlarmSound() {
+        const audio = document.getElementById('alarmSound');
+        audio.play();
+
+        // Add the shake class to the clock image
+        const clockImage = document.getElementById('clockImage');
+        clockImage.classList.add('shake');
+    }
+
+    function stopAlarmSound() {
+        const audio = document.getElementById('alarmSound');
+        audio.pause();
+        audio.currentTime = 0;
+
+        // Remove the shake class from the clock image
+        const clockImage = document.getElementById('clockImage');
+        clockImage.classList.remove('shake');
+    }
+
+    function clearAlarm() {
+        // You can add functionality to clear the alarm if needed.
+        stopAlarmSound();
+        clearTimeout(alarmTimeout);
+        document.getElementById('timer').innerHTML = ''; // Clear timer display
+        alert('Alarm stoped...');
+    }
+
+
+
+    // Disable Inspect ------------------------
+    const disabledKeys = ["c", "C", "x", "J", "u", "I"]; // keys that will be disabled
+
+    const showAlert = e => {
+        e.preventDefault(); // preventing its default behaviour
+        return alert("Sorry, you can't view or copy source codes this way!");
+    }
+
+    document.addEventListener("contextmenu", e => {
+        showAlert(e); // calling showAlert() function on mouse right click
+    });
+
+    document.addEventListener("keydown", e => {
+        // calling showAlert() function, if the pressed key matched to disabled keys
+        if ((e.ctrlKey && disabledKeys.includes(e.key)) || e.key === "F12") {
+            showAlert(e);
+        }
+    });
+
+</script>
+
+</html>

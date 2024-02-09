@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        width: 100%;
+        background-image: url('./Images/BgImage.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: 'Roboto Mono', monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stopwatch {
+        margin-top: 50px;
+        background-color: rgba(255, 255, 255, 0);
+        box-shadow: 0.2px 0.2px 1px #ffffff, 10px 10px 100px #8677e2, 10px 10px 100px #39306e, -0.2px -0.2px 1px #ffffff;
+        border-radius: 0px 10px 0px;
+        padding: 30px;
+    }
+
+    #timer {
+        font-size: 120px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 10px 30px;
+        background: #786bc8;
+        border: none;
+        color: #fff;
+        border-radius: 20px;
+        font-size: 16px;
+        margin: 0 5px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        color: #000;
+        background: #fff;
+    }
+
+    #start:disabled {
+        background-color: #000;
+        color: #fff;
+        cursor: not-allowed;
+    }
+
+    #stop:disabled {
+        background-color: #000;
+        color: #fff;
+        cursor: not-allowed;
+    }
+
+    @media only screen and (max-width: 600px) {
+        header {
+            padding: 10px;
+        }
+
+        #timer {
+            font-size: 80px;
+        }
+    }
+
+    @media only screen and (max-width: 400px) {
+        #timer {
+            font-size: 40px;
+        }
+
+        button {
+            font-size: 10px;
+        }
+    }
+
+    .disclaimer {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        margin-left: auto;
+        right: 0;
+        margin-right: auto;
+        width: fit-content;
+        color: rgb(0, 0, 0);
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .disclaimer a {
+        text-decoration: none;
+        color: #584f95;
+    }
+
+    .disclaimer a:hover {
+        font-weight: bolder;
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    
+    <div class="container">
+
+        <div class="stopwatch">
+            <div id="timer">00:00:00</div>
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+
+        <p class="disclaimer">
+            Designed & Created by <a href="https://aviksaharoy.github.io/" target="_blank">Avik</a>
+        </p>
+
+    </div>
+
+</body>
+<script>
+
+    var watch = (function () {
+        var timer = document.getElementById("timer");
+        var stop = document.getElementById("stop");
+        var reset = document.getElementById("reset");
+        var start = document.getElementById("start");
+        var time = "00:00:00";
+        var seconds = 0;
+        var minutes = 0;
+        var hours = 0;
+        var t;
+
+        timer.textContent = time;
+
+        function buildTimer() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                    if (hours >= 24) {
+                        hours = 0;
+                    }
+                }
+            }
+
+            timer.textContent = (hours < 10 ? "0" + hours.toString() : hours) + ":" +
+                (minutes < 10 ? "0" + minutes.toString() : minutes) + ":" +
+                (seconds < 10 ? "0" + seconds.toString() : seconds);
+        }
+
+        function stopTimer() {
+            start.disabled = false; // Enable the "Start" button
+            if (seconds > 0) {
+                stop.disabled = true;
+            }
+            clearInterval(t);
+        }
+
+        function startTimer() {
+            clearInterval(t);
+            start.disabled = true; // Disable the "Start" button
+            stop.disabled = false;
+            t = setInterval(buildTimer, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(t);
+            timer.textContent = time;
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            start.disabled = false; // Enable the "Start" button
+            stop.disabled = false;
+        }
+
+        start.addEventListener("click", startTimer);
+        stop.addEventListener("click", stopTimer);
+        reset.addEventListener("click", resetTimer);
+
+    })();
+
+
+    // Disable Inspect ------------------------
+    const disabledKeys = ["c", "C", "x", "J", "u", "I"]; // keys that will be disabled
+
+    const showAlert = e => {
+        e.preventDefault(); // preventing its default behaviour
+        return alert("Sorry, you can't view or copy source codes this way!");
+    }
+
+    document.addEventListener("contextmenu", e => {
+        showAlert(e); // calling showAlert() function on mouse right click
+    });
+
+    document.addEventListener("keydown", e => {
+        // calling showAlert() function, if the pressed key matched to disabled keys
+        if ((e.ctrlKey && disabledKeys.includes(e.key)) || e.key === "F12") {
+            showAlert(e);
+        }
+    });
+
+</script>
+
+</html>

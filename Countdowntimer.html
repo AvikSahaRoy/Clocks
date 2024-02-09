@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdowntimer</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        width: 100%;
+        background-image: url('./Images/BgImage.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: 'Roboto Mono', monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* margin-top: 80px; */
+    }
+
+    button {
+        padding: 10px 30px;
+        background: #786bc8;
+        border: none;
+        color: #fff;
+        border-radius: 20px;
+        font-size: 16px;
+        margin: 0 5px;
+        outline: none;
+        cursor: pointer;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    button:hover {
+        color: #fff;
+        background: #000;
+    }
+
+    #countdown {
+        margin-top: 40px;
+        background-color: rgba(255, 255, 255, 0);
+        box-shadow: 0.2px 0.2px 1px #ffffff, 10px 10px 100px #8677e2, 10px 10px 100px #39306e, -0.2px -0.2px 1px #ffffff;
+        border-radius: 0px 10px 0px;
+        padding: 30px 40px 30px 30px;
+    }
+
+    #countdown label {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    #countdown input {
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    #countdownTimer {
+        margin: 20px;
+        font-size: 50px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+
+    @media only screen and (max-width: 768px) {}
+
+    @media only screen and (max-width: 600px) {
+        header {
+            padding: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        button {
+            font-size: 10px;
+        }
+
+        #countdown input {
+            font-size: 10px;
+        }
+
+        #countdownTimer {
+            font-size: 30px;
+        }
+    }
+
+    .disclaimer {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        margin-left: auto;
+        right: 0;
+        margin-right: auto;
+        width: fit-content;
+        color: rgb(0, 0, 0);
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .disclaimer a {
+        text-decoration: none;
+        color: #584f95;
+    }
+
+    .disclaimer a:hover {
+        font-weight: bolder;
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    <div class="container">
+
+        <div id="countdown">
+            <div id="countdownTimer"></div>
+            <label for="hours">Hours</label>
+            <input type="number" id="hours" placeholder="0" min="0"><br><br>
+            <label for="minutes">Minutes</label>
+            <input type="number" id="minutes" placeholder="0" min="0" max="59"><br><br>
+            <label for="seconds">Seconds</label>
+            <input type="number" id="seconds" placeholder="0" min="0" max="59">
+            <button onclick="startCountdown()">Start Countdown</button>
+        </div>
+
+        <p class="disclaimer">
+            Designed & Created by <a href="https://aviksaharoy.github.io/" target="_blank">Avik</a>
+        </p>
+    </div>
+
+</body>
+<script>
+
+    function startCountdown() {
+        // Get user input for hours, minutes, and seconds
+        const hours = parseInt(document.getElementById('hours').value) || 0;
+        const minutes = parseInt(document.getElementById('minutes').value) || 0;
+        const seconds = parseInt(document.getElementById('seconds').value) || 0;
+
+        // Calculate the total countdown duration in milliseconds
+        const countDownDuration = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
+
+        // Set the date we're counting down to (current time + countdown duration)
+        const countDownDate = new Date().getTime() + countDownDuration;
+
+        // Update the countdown every 1 second
+        const x = setInterval(function () {
+            // Get the current date and time
+            const now = new Date().getTime();
+
+            // Calculate the remaining time
+            const distance = countDownDate - now;
+
+            // Calculate days, hours, minutes, and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the countdown in the "countdownTimer" element
+            document.getElementById("countdownTimer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            // If the countdown is over, display a message
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdownTimer").innerHTML = "EXPIRED";
+            }
+        }, 1000);
+    }
+
+
+    // Disable Inspect ------------------------
+    const disabledKeys = ["c", "C", "x", "J", "u", "I"]; // keys that will be disabled
+
+    const showAlert = e => {
+        e.preventDefault(); // preventing its default behaviour
+        return alert("Sorry, you can't view or copy source codes this way!");
+    }
+
+    document.addEventListener("contextmenu", e => {
+        showAlert(e); // calling showAlert() function on mouse right click
+    });
+
+    document.addEventListener("keydown", e => {
+        // calling showAlert() function, if the pressed key matched to disabled keys
+        if ((e.ctrlKey && disabledKeys.includes(e.key)) || e.key === "F12") {
+            showAlert(e);
+        }
+    });
+
+</script>
+
+</html>

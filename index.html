@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        width: 100%;
+        background-image: url('./Images/BgImage.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: 'Roboto Mono', monospace;
+        /* display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0; */
+    }
+
+    /* navbar ----------------------- */
+    header {
+        background-color: none;
+        padding: 10px 40px 10px 40px;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #000;
+    }
+
+    .logo {
+        font-size: 1.8em;
+    }
+
+    .logo a {
+        text-decoration: none;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .logo a:hover {
+        color: #786bc8;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 0 10px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #000;
+    }
+
+    /* navbar--------------------------- */
+
+    .container {
+        text-align: center;
+        margin-top: 200px;
+    }
+
+    .display-date {
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    #MyClockDisplay {
+        font-size: 8em;
+        display: inline-block;
+        letter-spacing: 7px;
+        background-color: rgba(255, 255, 255, 0);
+        box-shadow: 0.2px 0.2px 1px #ffffff, 10px 10px 100px #8677e2, 10px 10px 100px #39306e, -0.2px -0.2px 1px #ffffff;
+        border-radius: 0px 10px 0px;
+        animation-name: anim;
+        animation-duration: 5s;
+        animation-timing-function: linear;
+        animation-delay: 0s;
+        animation-iteration-count: infinite;
+        margin-top: 20px;
+        padding: 0 20px 0 20px;
+    }
+
+    @keyframes anim {
+        0% {
+            transform: translateY(0px) translateX(0px);
+        }
+
+        50% {
+            transform: translateY(10px) translateX(5px);
+        }
+
+        100% {
+            transform: translateY(0px) translateX(0px);
+        }
+    }
+
+    button {
+        padding: 10px 30px;
+        background: #786bc8;
+        border: none;
+        color: #fff;
+        border-radius: 20px;
+        font-size: 16px;
+        margin: 0 5px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        color: #000;
+        background: #fff;
+    }
+
+    @media only screen and (max-width: 768px) {
+        #MyClockDisplay {
+            font-size: 5em;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        #MyClockDisplay {
+            font-size: 3em;
+        }
+
+        .display-date {
+            font-size: 20px;
+        }
+
+        header {
+            padding: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 400px) {
+        #MyClockDisplay {
+            font-size: 2em;
+        }
+
+        button {
+            font-size: 10px;
+        }
+
+    }
+
+    .disclaimer {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        margin-left: auto;
+        right: 0;
+        margin-right: auto;
+        width: fit-content;
+        color: rgb(0, 0, 0);
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .disclaimer a {
+        text-decoration: none;
+        color: #584f95;
+    }
+
+    .disclaimer a:hover {
+        font-weight: bolder;
+        text-decoration: underline;
+    }
+
+
+    /* Dropdown button ----------------- */
+    .dropbtn {
+        background-color: #786bc8;
+        color: white;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        border-radius: 5px;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #786bc8;
+        color: #fff;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #000;
+        color: #fff;
+    }
+</style>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="./Clock.html">CLOCKS</a></div>
+            <div class="dropdown">
+                <button class="dropbtn">Explore</button>
+                <div class="dropdown-content">
+                    <a href="./Stopwatch.html">Stopwatch</a>
+                    <a href="./Countdowntimer.html">Countdowntimer</a>
+                    <a href="./AlarmClock.html">Alarmclock</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+
+        <div class="display-date">
+            <span id="day">day</span>,
+            <span id="daynum">00</span>
+            <span id="month">month</span>
+            <span id="year">0000</span>
+        </div>
+
+        <div class="display-time" id="MyClockDisplay"></div>
+
+        <p class="disclaimer">
+            Designed & Created by <a href="https://aviksaharoy.github.io/" target="_blank">Avik</a>
+        </p>
+
+    </div>
+
+</body>
+<script>
+    const displayTime = document.querySelector(".display-time");
+
+    // Time
+    function showTime() {
+        let time = new Date();
+        let hours = time.getHours();
+        let minutes = time.getMinutes();
+        let seconds = time.getSeconds();
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert to 12-hour format
+        hours = hours % 12 || 12;
+
+        let formattedTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${ampm}`;
+
+        displayTime.innerText = formattedTime;
+        setTimeout(showTime, 1000);
+    }
+
+    showTime();
+
+    // Date
+    function updateDate() {
+        let today = new Date();
+
+        // return number
+        let dayName = today.getDay(),
+            dayNum = today.getDate(),
+            month = today.getMonth(),
+            year = today.getFullYear();
+
+        const months = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ];
+        const dayWeek = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ];
+        // value -> ID of the html element
+        const IDCollection = ["day", "daynum", "month", "year"];
+        // return value array with number as a index
+        const val = [dayWeek[dayName], dayNum, months[month], year];
+        for (let i = 0; i < IDCollection.length; i++) {
+            document.getElementById(IDCollection[i]).firstChild.nodeValue = val[i];
+        }
+    }
+
+    updateDate();
+
+
+    // Disable Inspect ------------------------
+    const disabledKeys = ["c", "C", "x", "J", "u", "I"]; // keys that will be disabled
+
+    const showAlert = e => {
+        e.preventDefault(); // preventing its default behaviour
+        return alert("Sorry, you can't view or copy source codes this way!");
+    }
+
+    document.addEventListener("contextmenu", e => {
+        showAlert(e); // calling showAlert() function on mouse right click
+    });
+
+    document.addEventListener("keydown", e => {
+        // calling showAlert() function, if the pressed key matched to disabled keys
+        if ((e.ctrlKey && disabledKeys.includes(e.key)) || e.key === "F12") {
+            showAlert(e);
+        }
+    });
+
+</script>
+
+</html>
